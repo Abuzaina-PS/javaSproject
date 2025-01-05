@@ -23,6 +23,7 @@
   margin-left: 7%;
   margin-right: 7%;
   padding: 0%;
+  border-color: gray;
   input {
     flex: 1;
     border: none;
@@ -35,6 +36,7 @@
     border-radius: 5px;
     margin-top: 1%;
     background-color: #fff;
+    border-color: darkgray;
   }
   button {
     color: aliceblue;
@@ -65,5 +67,8 @@
     margin-left: 2%;
     margin-top: 0.2%;
     border-radius: 5px 5px 0px 5px;
+  }
+  p {
+    margin-left: 2.5%;
   }
 }
