@@ -19,14 +19,23 @@ button.addEventListener("click", function () {
     // Check if the input is empty
     result.textContent = "Task can not be empety.";
     result.style.color = "red";
-  } else if (inputValue.length < 3) {
+    setTimeout(() => {
+      result.textContent = "";
+    }, 1000);
+  } else if (inputValue.length < 4) {
     // Check if the input is less than 3 characters
     result.textContent = "task must be at least 5 charecters long";
     result.style.color = "red";
+    setTimeout(() => {
+      result.textContent = "";
+    }, 1000);
   } else if (/^\d/.test(inputValue)) {
     // Check if the text starts with a number
     result.textContent = "Task can not starts with a number.";
     result.style.color = "red";
+    setTimeout(() => {
+      result.textContent = "";
+    }, 1000);
   } else {
   }
 });
