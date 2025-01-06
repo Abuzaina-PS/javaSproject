@@ -11,7 +11,7 @@ button.addEventListener("mouseup", function () {
   button.textContent = "Add New Task";
 });
 
-// Validate input on button click
+
 button.addEventListener("click", function () {
   const inputValue = input.value.trim(); // Get the input value and remove extra spaces
 
