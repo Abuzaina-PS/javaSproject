@@ -120,9 +120,18 @@ function closeEditModal() {
 // Save the edited task
 saveEditButton.addEventListener("click", () => {
   const updatedTaskName = editTaskInput.value.trim();
-
+  const result2 = document.getElementById("demo");
   if (updatedTaskName === "") {
-    alert("Task name cannot be empty!");
+    result2.textContent = "Task cannot be empty.";
+    result2.style.color = "red";
+    return;
+  } else if (updatedTaskName.length < 5) {
+    result2.textContent = "Task must be at least 5 characters long.";
+    result2.style.color = "red";
+    return;
+  } else if (/^\d/.test(updatedTaskName)) {
+    result2.textContent = "Task cannot start with a number.";
+    result2.style.color = "red";
     return;
   }
 
