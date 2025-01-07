@@ -19,9 +19,33 @@
           ><input type="text" placeholder="New Todo" id="myInput" />
         </div>
         <p id="inputVal"></p>
-        <button id="myButton">Add New Task</button>
+        <button id="addTaskButton">Add New Task</button>
       </div>
     </div>
+    <div class="buuton-contanir">
+      <h1>To Do List</h1>
+      <div class="buttonPosition">
+        <button id="showAll">All</button>
+        <button id="showDone">Done</button>
+        <button id="showTodo">To Do</button>
+      </div>
+      <table id="todoTable">
+        <thead></thead>
+        <tbody>
+          <!-- Tasks will be added here dynamically -->
+        </tbody>
+      </table>
+    </div>
+    <!-- Edit Task Modal -->
+    <div id="editTaskModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn">&times;</span>
+        <h3>Edit Task</h3>
+        <input type="text" id="editTaskInput" placeholder="Edit your task..." />
+        <button id="saveEditButton">Save</button>
+      </div>
+    </div>
+
     <script src="main.js"></script>
   </body>
 </html>
