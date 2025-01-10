@@ -143,8 +143,8 @@
 
 /* Modal content */
 .modal-content {
-  display: flexbox;
-  grid: 1%;
+  display: flex; /* Use 'flex' for proper layout behavior */
+  flex-direction: column; /* Stack items vertically */
   background-color: white;
   margin: 15% auto;
   padding: 20px;
@@ -152,9 +152,29 @@
   width: 30%;
   border-radius: 8px;
   text-align: center;
-  input {
-    width: 100%;
-  }
+}
+
+/* Modal container */
+#editTaskModal {
+  display: none; /* Ensure the modal is hidden by default */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+/* Input field styling */
+input {
+  width: 100%; /* Make inputs take up the full width */
+  margin-bottom: 10px; /* Add some spacing between inputs */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
 /* Close button */
@@ -168,4 +188,88 @@
 
 .close-btn:hover {
   color: black;
+}
+#todoTable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  td {
+    border: 1px solid #ddd;
+    font-size: x-large;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+      sans-serif;
+    text-align: left;
+  }
+  tr {
+    border-radius: 5px;
+    margin-bottom: 10px;
+  }
+
+  .done {
+    text-decoration: line-through;
+    color: #ff0000;
+    font-style: italic;
+  }
+}
+.edit-button {
+  background-color: transparent; /* Make the background transparent */
+  border: none; /* Remove the border */
+  cursor: pointer; /* Change the cursor to a pointer */
+  padding: 2%; /* Add some padding for better spacing */
+  border-radius: 4px; /* Optional: Rounded corners */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Hover effect for the edit button */
+.edit-button:hover {
+  background-color: #ffe58f; /* Light yellow background on hover */
+  transform: scale(1.1); /* Slightly enlarge the button */
+}
+
+/* Style for the icon inside the edit button */
+.edit-button i {
+  font-size: 18px; /* Adjust the icon size */
+}
+/* Style for the trash button */
+.delete-button {
+  background-color: transparent; /* Make the background transparent */
+  border: none; /* Remove the border */
+  cursor: pointer; /* Change the cursor to a pointer */
+  padding: 5px; /* Add some padding for spacing */
+  border-radius: 4px; /* Optional: Rounded corners */
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+/* Hover effect for the trash button */
+.delete-button:hover {
+  background-color: #ffcccc; /* Light red background on hover */
+  transform: scale(1.1); /* Slightly enlarge the button */
+}
+
+/* Style for the icon inside the trash button */
+.delete-button i {
+  font-size: 18px; /* Adjust the icon size */
+}
+.deletBuuton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25%;
+  button {
+    color: white;
+    background-color: #d61c1c;
+    border: none;
+    border-radius: 5px;
+    margin: 2%;
+    padding: 1%;
+    width: 25.7%;
+    cursor: pointer;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+  }
+  button:hover {
+    background-color: #ff0000;
+  }
 }

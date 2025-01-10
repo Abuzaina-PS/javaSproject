@@ -40,6 +40,7 @@ addTaskButton.addEventListener("click", () => {
 
   updateTable(); // Update the table
   taskInput.value = ""; // Clear the input field
+  saveTasks();
 });
 
 // Show validation messages
@@ -62,15 +63,16 @@ function updateTable(filter = "all") {
   });
 
   filteredTasks.forEach((task, index) => {
+    // Create a new row for each task
     const row = document.createElement("tr");
 
-    // Task Name
+    // First Column: Task Name
     const taskCell = document.createElement("td");
     taskCell.textContent = task.name;
-    if (task.done) taskCell.classList.add("done");
+    if (task.done) taskCell.classList.add("done"); // Style for completed tasks
     row.appendChild(taskCell);
 
-    // Task Status
+    // Second Column: Task Status
     const statusCell = document.createElement("td");
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
@@ -82,25 +84,41 @@ function updateTable(filter = "all") {
     statusCell.appendChild(checkbox);
     row.appendChild(statusCell);
 
-    // Actions
+    // Third Column: Actions (Edit/Delete)
     const actionsCell = document.createElement("td");
 
     // Edit Button
     const editButton = document.createElement("button");
-    editButton.textContent = "✏️";
+    editButton.className = "edit-button"; // Add a class for styling
+
+    const editIcon = document.createElement("i");
+    editIcon.className = "fa-solid fa-pen";
+    editIcon.style.color = "#FFD43B"; // Set the icon color
+    editButton.appendChild(editIcon);
+
     editButton.addEventListener("click", () => openEditModal(index));
     actionsCell.appendChild(editButton);
-
     // Delete Button
     const deleteButton = document.createElement("button");
-    deleteButton.textContent = "🗑️";
+    deleteButton.className = "delete-button"; // Add a class for styling
+
+    const trashIcon = document.createElement("i");
+    trashIcon.className = "fa-solid fa-trash";
+    trashIcon.style.color = "#ff0000"; // Set the icon color to red
+    deleteButton.appendChild(trashIcon);
+
     deleteButton.addEventListener("click", () => {
-      tasks.splice(index, 1);
-      updateTable(filter);
+      tasks.splice(index, 1); // Remove the task
+      updateTable(filter); // Re-render the table
     });
+
+    actionsCell.appendChild(deleteButton);
+
     actionsCell.appendChild(deleteButton);
 
     row.appendChild(actionsCell);
+
+    // Append the row to the table body
     todoTable.appendChild(row);
   });
 }
@@ -160,3 +178,18 @@ document
 document
   .getElementById("showTodo")
   .addEventListener("click", () => updateTable("todo"));
+// Select the "Delete Done Tasks" and "Delete All Tasks" buttons
+const deleteDoneButton = document.getElementById("deletdoneButton");
+const deleteAllButton = document.getElementById("deletallButton");
+
+// Add event listener to delete all tasks
+deleteAllButton.addEventListener("click", () => {
+  tasks = []; // Clear the tasks array
+  updateTable(); // Re-render the table
+});
+
+// Add event listener to delete only done tasks
+deleteDoneButton.addEventListener("click", () => {
+  tasks = tasks.filter((tasks) => !tasks.done); // Keep only tasks that are not done
+  updateTable(); // Re-render the table
+});
