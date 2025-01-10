@@ -9,8 +9,11 @@ const editTaskInput = document.getElementById("editTaskInput");
 const saveEditButton = document.getElementById("saveEditButton");
 const closeModalButton = document.querySelector(".close-btn");
 
-let tasks = []; // Array to store tasks
+let tasks = JSON.parse(localStorage.getItem("tasks")) || []; // Load tasks from localStorage
 let taskToEditIndex = null; // Store the index of the task being edited
+
+// Initialize the table with tasks from localStorage
+updateTable();
 
 // Add task event listener
 addTaskButton.addEventListener("click", () => {
@@ -40,7 +43,7 @@ addTaskButton.addEventListener("click", () => {
 
   updateTable(); // Update the table
   taskInput.value = ""; // Clear the input field
-  saveTasks();
+  saveTasks(); // Save tasks to localStorage
 });
 
 // Show validation messages
@@ -50,6 +53,11 @@ function showMessage(message, color) {
   setTimeout(() => {
     result.textContent = ""; // Clear the message after 1 second
   }, 1000);
+}
+
+// Save tasks to localStorage
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
 // Update the table dynamically
@@ -63,13 +71,12 @@ function updateTable(filter = "all") {
   });
 
   filteredTasks.forEach((task, index) => {
-    // Create a new row for each task
     const row = document.createElement("tr");
 
     // First Column: Task Name
     const taskCell = document.createElement("td");
     taskCell.textContent = task.name;
-    if (task.done) taskCell.classList.add("done"); // Style for completed tasks
+    if (task.done) taskCell.classList.add("done");
     row.appendChild(taskCell);
 
     // Second Column: Task Status
@@ -79,6 +86,7 @@ function updateTable(filter = "all") {
     checkbox.checked = task.done;
     checkbox.addEventListener("change", () => {
       tasks[index].done = checkbox.checked;
+      saveTasks(); // Save changes to localStorage
       updateTable(filter);
     });
     statusCell.appendChild(checkbox);
@@ -89,36 +97,32 @@ function updateTable(filter = "all") {
 
     // Edit Button
     const editButton = document.createElement("button");
-    editButton.className = "edit-button"; // Add a class for styling
-
+    editButton.className = "edit-button";
     const editIcon = document.createElement("i");
     editIcon.className = "fa-solid fa-pen";
-    editIcon.style.color = "#FFD43B"; // Set the icon color
+    editIcon.style.color = "#FFD43B";
     editButton.appendChild(editIcon);
 
     editButton.addEventListener("click", () => openEditModal(index));
     actionsCell.appendChild(editButton);
+
     // Delete Button
     const deleteButton = document.createElement("button");
-    deleteButton.className = "delete-button"; // Add a class for styling
-
+    deleteButton.className = "delete-button";
     const trashIcon = document.createElement("i");
     trashIcon.className = "fa-solid fa-trash";
-    trashIcon.style.color = "#ff0000"; // Set the icon color to red
+    trashIcon.style.color = "#ff0000";
     deleteButton.appendChild(trashIcon);
 
     deleteButton.addEventListener("click", () => {
-      tasks.splice(index, 1); // Remove the task
-      updateTable(filter); // Re-render the table
+      tasks.splice(index, 1);
+      saveTasks(); // Save changes to localStorage
+      updateTable(filter);
     });
 
     actionsCell.appendChild(deleteButton);
-
-    actionsCell.appendChild(deleteButton);
-
     row.appendChild(actionsCell);
 
-    // Append the row to the table body
     todoTable.appendChild(row);
   });
 }
@@ -154,8 +158,9 @@ saveEditButton.addEventListener("click", () => {
   }
 
   tasks[taskToEditIndex].name = updatedTaskName;
-  updateTable(); // Re-render the table
-  closeEditModal(); // Close the modal
+  saveTasks(); // Save changes to localStorage
+  updateTable();
+  closeEditModal();
 });
 
 // Close the modal when clicking the "X" button
@@ -178,18 +183,21 @@ document
 document
   .getElementById("showTodo")
   .addEventListener("click", () => updateTable("todo"));
+
 // Select the "Delete Done Tasks" and "Delete All Tasks" buttons
 const deleteDoneButton = document.getElementById("deletdoneButton");
 const deleteAllButton = document.getElementById("deletallButton");
 
 // Add event listener to delete all tasks
 deleteAllButton.addEventListener("click", () => {
-  tasks = []; // Clear the tasks array
-  updateTable(); // Re-render the table
+  tasks = [];
+  saveTasks(); // Save changes to localStorage
+  updateTable();
 });
 
 // Add event listener to delete only done tasks
 deleteDoneButton.addEventListener("click", () => {
-  tasks = tasks.filter((tasks) => !tasks.done); // Keep only tasks that are not done
-  updateTable(); // Re-render the table
+  tasks = tasks.filter((task) => !task.done);
+  saveTasks(); // Save changes to localStorage
+  updateTable();
 });
