@@ -39,6 +39,7 @@ addTaskButton.addEventListener("click", () => {
     name: inputValue,
     done: false,
   };
+
   tasks.push(newTask);
 
   updateTable(); // Update the table
