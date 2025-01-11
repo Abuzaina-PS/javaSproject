@@ -273,3 +273,63 @@ input {
     background-color: #ff0000;
   }
 }
+.task-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  transition: background-color 0.3s;
+}
+
+.task-item:hover {
+  background-color: #f0f0f0;
+}
+
+.task-item .done {
+  text-decoration: line-through;
+  color: red;
+}
+
+.task-checkbox {
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.edit-button,
+.delete-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+.edit-button i {
+  color: #ffd43b;
+}
+
+.delete-button i {
+  color: red;
+}
+
+.edit-button:hover i,
+.delete-button:hover i {
+  opacity: 0.8;
+}
