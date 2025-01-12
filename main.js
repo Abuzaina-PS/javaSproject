@@ -1,4 +1,5 @@
 const addTaskButton = document.getElementById("addTaskButton");
+
 const taskInput = document.getElementById("myInput");
 const todoList = document.getElementById("todoList"); // Changed to a list
 const result = document.getElementById("inputVal");
@@ -16,21 +17,43 @@ let taskToEditIndex = null; // Store the index of the task being edited
 updateList();
 
 // Add task event listener
+
 addTaskButton.addEventListener("click", () => {
+  const originalText = addTaskButton.textContent; // Store the original text
+  addTaskButton.textContent = "Adding..."; // Change the button text
+  // Function to reset the button text
+  function resetButtonText() {
+    setTimeout(() => {
+      addTaskButton.textContent = "Add Task"; // Reset the text to the original
+    }, 500); // Delay for 1 second to simulate a loading effect
+  }
+
   const inputValue = taskInput.value.trim();
 
   if (inputValue === "") {
     showMessage("Task cannot be empty.", "red");
+    resetButtonText();
     return;
   }
 
   if (inputValue.length < 5) {
     showMessage("Task must be at least 5 characters long.", "red");
+    resetButtonText();
     return;
   }
 
   if (/^\d/.test(inputValue)) {
     showMessage("Task cannot start with a number.", "red");
+    resetButtonText();
+    return;
+  }
+
+  const isDuplicate = tasks.some(
+    (task) => task.name.toLowerCase() === inputValue.toLowerCase()
+  );
+  if (isDuplicate) {
+    showMessage("Task already exists.", "red");
+    resetButtonText();
     return;
   }
 
@@ -45,6 +68,9 @@ addTaskButton.addEventListener("click", () => {
   updateList(); // Update the list
   taskInput.value = ""; // Clear the input field
   saveTasks(); // Save tasks to localStorage
+
+  // Reset the button text after the task is added
+  resetButtonText();
 });
 
 // Show validation messages

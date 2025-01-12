@@ -68,13 +68,13 @@
     cursor: pointer;
   }
   button:active {
-    color: black;
-    background-color: gray;
+    color: rgb(0, 0, 0);
+    background-color: rgb(243, 239, 239);
     border: none;
     border-radius: 4px 5px;
   }
   button:hover {
-    background-color: #008a94;
+    background-color: #1b6e74;
   }
 
   i {
@@ -274,9 +274,9 @@ input {
   }
 }
 .task-container {
-  max-width: 600px;
+  max-width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2%;
   font-family: Arial, sans-serif;
 }
 
@@ -289,9 +289,10 @@ input {
 .task-item {
   display: flex;
   align-items: center;
+
   justify-content: space-between;
   background-color: #f9f9f9;
-  border: 1px solid #ddd;
+  border: 1px solid gray;
   border-radius: 5px;
   padding: 10px 15px;
   margin-bottom: 10px;
