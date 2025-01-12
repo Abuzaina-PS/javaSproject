@@ -21,12 +21,6 @@ updateList();
 addTaskButton.addEventListener("click", () => {
   const originalText = addTaskButton.textContent; // Store the original text
   addTaskButton.textContent = "Adding..."; // Change the button text
-  // Function to reset the button text
-  function resetButtonText() {
-    setTimeout(() => {
-      addTaskButton.textContent = "Add Task"; // Reset the text to the original
-    }, 500); // Delay for 1 second to simulate a loading effect
-  }
 
   const inputValue = taskInput.value.trim();
 
@@ -47,7 +41,6 @@ addTaskButton.addEventListener("click", () => {
     resetButtonText();
     return;
   }
-
   const isDuplicate = tasks.some(
     (task) => task.name.toLowerCase() === inputValue.toLowerCase()
   );
@@ -73,6 +66,13 @@ addTaskButton.addEventListener("click", () => {
   resetButtonText();
 });
 
+// Function to reset the button text
+function resetButtonText() {
+  setTimeout(() => {
+    addTaskButton.textContent = "Add Task"; // Reset the text to the original
+  }, 990); // Delay for 1 second to simulate a loading effect
+}
+
 // Show validation messages
 function showMessage(message, color) {
   result.textContent = message;
@@ -88,62 +88,64 @@ function saveTasks() {
 }
 
 // Update the list dynamically
-function updateList(filter = "all") {
+function updateList() {
   todoList.innerHTML = ""; // Clear the list
 
-  const filteredTasks = tasks.filter((task) => {
-    if (filter === "done") return task.done;
-    if (filter === "todo") return !task.done;
-    return true;
-  });
+  tasks.forEach((task, index) => {
+    const taskItem = document.createElement("li");
+    taskItem.className = "task-item";
 
-  filteredTasks.forEach((task, index) => {
-    const listItem = document.createElement("li");
-    listItem.className = "task-item";
+    // Task name
+    const taskName = document.createElement("span");
+    taskName.textContent = task.name;
+    taskName.className = task.done ? "task-name done" : "task-name";
 
-    // Task Name
-    const taskSpan = document.createElement("span");
-    taskSpan.textContent = task.name;
-    if (task.done) {
-      taskSpan.classList.add("done");
-    }
-    listItem.appendChild(taskSpan);
+    taskItem.appendChild(taskName);
 
-    // Task Status (Checkbox)
+    // Actions container
+    const actionsContainer = document.createElement("div");
+    actionsContainer.className = "actions";
+    // Checkbox
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = task.done;
     checkbox.className = "task-checkbox";
     checkbox.addEventListener("change", () => {
       tasks[index].done = checkbox.checked;
-      saveTasks(); // Save changes to localStorage
-      updateList(filter);
+      saveTasks();
+      updateList();
     });
-    listItem.appendChild(checkbox);
-
-    // Edit Button
+    // Edit button
     const editButton = document.createElement("button");
     editButton.className = "edit-button";
     const editIcon = document.createElement("i");
     editIcon.className = "fa-solid fa-pen";
     editButton.appendChild(editIcon);
-    editButton.addEventListener("click", () => openEditModal(index));
-    listItem.appendChild(editButton);
 
-    // Delete Button
+    editButton.addEventListener("click", () => openEditModal(index));
+    actionsContainer.appendChild(editButton);
+
+    // Delete button
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button";
     const trashIcon = document.createElement("i");
     trashIcon.className = "fa-solid fa-trash";
     deleteButton.appendChild(trashIcon);
+
     deleteButton.addEventListener("click", () => {
       tasks.splice(index, 1);
-      saveTasks(); // Save changes to localStorage
-      updateList(filter);
+      saveTasks();
+      updateList();
     });
-    listItem.appendChild(deleteButton);
+    actionsContainer.appendChild(deleteButton);
 
-    todoList.appendChild(listItem);
+    actionsContainer.appendChild(checkbox);
+
+    // Append actions container to task item
+    taskItem.appendChild(actionsContainer);
+
+    // Append task item to the list
+    todoList.appendChild(taskItem);
   });
 }
 
