@@ -223,7 +223,7 @@ input {
 
 /* Hover effect for the edit button */
 .edit-button:hover {
-  background-color: #ffe58f; /* Light yellow background on hover */
+  background-color: #ffe58f; 
   transform: scale(1.1); /* Slightly enlarge the button */
 }
 
@@ -274,7 +274,7 @@ input {
   }
 }
 /* Task container */
-/* Task container */
+
 /* Task container */
 .task-container {
   max-width: 90%;

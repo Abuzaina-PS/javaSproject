@@ -26,7 +26,7 @@ let taskToEditIndex = null; // Store the index of the task being edited
 // Initialize the list with tasks from localStorage
 updateList();
 
-// Add task event listener
+
 
 addTaskButton.addEventListener("click", () => {
   const originalText = addTaskButton.textContent; // Store the original text
