@@ -267,6 +267,19 @@ input {
   }
 }
 
+/* Optional scrollbar customization (modern browsers) */
+.task-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-container::-webkit-scrollbar-thumb {
+  background-color: #00a7b5;
+  border-radius: 4px;
+}
+
+.task-container::-webkit-scrollbar-thumb:hover {
+  background-color: #aaaaaa;
+}
 .task-container {
   max-width: 90%;
   margin: 0 auto;
@@ -313,7 +326,11 @@ input {
 }
 
 .task-checkbox {
-  margin-right: 10px;
+  border: none;
+  width: 2%;
+  margin-left: 4%;
+  height: 2%;
+
   cursor: pointer;
 }
 
@@ -334,7 +351,7 @@ input {
 
 .actions {
   display: flex;
-  gap: 2%;
+  gap: 10px; /* Increased gap between the buttons */
 }
 
 .edit-button,
