@@ -3,6 +3,16 @@ const addTaskButton = document.getElementById("addTaskButton");
 const taskInput = document.getElementById("myInput");
 const todoList = document.getElementById("todoList"); // Changed to a list
 const result = document.getElementById("inputVal");
+// Filter buttons
+document
+  .getElementById("showAll")
+  .addEventListener("click", () => updateList("all"));
+document
+  .getElementById("showDone")
+  .addEventListener("click", () => updateList("done"));
+document
+  .getElementById("showTodo")
+  .addEventListener("click", () => updateList("todo"));
 
 // Modal elements
 const editTaskModal = document.getElementById("editTaskModal");
@@ -88,24 +98,24 @@ function saveTasks() {
 }
 
 // Update the list dynamically
-function updateList() {
-  todoList.innerHTML = ""; // Clear the list
+function updateList(filter = "all") {
+  // Clear the list
+  todoList.innerHTML = "";
 
-  tasks.forEach((task, index) => {
+  // Filter tasks based on the selected filter
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "done") return task.done;
+    if (filter === "todo") return !task.done;
+    return true; // Show all tasks
+  });
+
+  // Iterate over filtered tasks
+  filteredTasks.forEach((task, index) => {
+    // Task item container
     const taskItem = document.createElement("li");
     taskItem.className = "task-item";
 
-    // Task name
-    const taskName = document.createElement("span");
-    taskName.textContent = task.name;
-    taskName.className = task.done ? "task-name done" : "task-name";
-
-    taskItem.appendChild(taskName);
-
-    // Actions container
-    const actionsContainer = document.createElement("div");
-    actionsContainer.className = "actions";
-    // Checkbox
+    // Task checkbox
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
     checkbox.checked = task.done;
@@ -113,42 +123,49 @@ function updateList() {
     checkbox.addEventListener("change", () => {
       tasks[index].done = checkbox.checked;
       saveTasks();
-      updateList();
+      updateList(filter);
     });
+
+    // Task name
+    const taskName = document.createElement("span");
+    taskName.textContent = task.name;
+    taskName.className = task.done ? "task-name done" : "task-name";
+
+    // Actions container
+    const actionsContainer = document.createElement("div");
+    actionsContainer.className = "actions";
+
     // Edit button
     const editButton = document.createElement("button");
     editButton.className = "edit-button";
-    const editIcon = document.createElement("i");
-    editIcon.className = "fa-solid fa-pen";
-    editButton.appendChild(editIcon);
-
+    editButton.innerHTML = '<i class="fa-solid fa-pen"></i>';
     editButton.addEventListener("click", () => openEditModal(index));
-    actionsContainer.appendChild(editButton);
 
     // Delete button
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-button";
-    const trashIcon = document.createElement("i");
-    trashIcon.className = "fa-solid fa-trash";
-    deleteButton.appendChild(trashIcon);
-
+    deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     deleteButton.addEventListener("click", () => {
-      tasks.splice(index, 1);
-      saveTasks();
-      updateList();
+      if (confirm("Are you sure you want to delete this task?")) {
+        tasks.splice(index, 1);
+        saveTasks();
+        updateList(filter);
+      }
     });
+
+    // Append buttons to actions container
+    actionsContainer.appendChild(editButton);
     actionsContainer.appendChild(deleteButton);
 
-    actionsContainer.appendChild(checkbox);
-
-    // Append actions container to task item
+    // Append elements to task item
+    taskItem.appendChild(taskName); // Ensuring text is center
+    taskItem.appendChild(checkbox);
     taskItem.appendChild(actionsContainer);
 
     // Append task item to the list
     todoList.appendChild(taskItem);
   });
 }
-
 // Open the modal for editing
 function openEditModal(index) {
   taskToEditIndex = index;

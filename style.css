@@ -274,6 +274,8 @@ input {
   }
 }
 /* Task container */
+/* Task container */
+/* Task container */
 .task-container {
   max-width: 90%;
   margin: 0 auto;
@@ -288,31 +290,37 @@ input {
   margin: 0;
 }
 
-/* Task item styling */
+/* Task item */
 .task-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
-  padding: 10px 15px;
+  padding: 10px;
   margin-bottom: 10px;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease;
+  justify-content: space-between; /* Align elements properly */
 }
 
-/* Hover effect for the task item */
-.task-item:hover {
-  background-color: #f0f0f0;
+/* Task checkbox */
+.task-checkbox {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
-/* Task name styling */
+/* Task name */
 .task-name {
-  flex-grow: 1;
-  text-align: left;
+  flex-grow: 1; /* Allow the name to take remaining space */
+  font-size: 16px;
+  margin: 0;
+  white-space: normal; /* Allow text to wrap if needed */
+  overflow: visible; /* Ensure text is fully shown */
+  text-overflow: clip; /* Remove ellipsis truncation */
+  text-align: left; /* Align text to the left */
 }
 
-/* Completed task styling */
+/* Completed task */
 .task-name.done {
   text-decoration: line-through;
   color: red;
@@ -321,36 +329,27 @@ input {
 /* Actions container */
 .actions {
   display: flex;
-  align-items: center;
-  gap: 3%; /* Space between buttons and checkbox */
+  gap: 2%; /* Space between buttons */
 }
-/* Checkbox styling */
-.task-checkbox {
-  margin: 5%; /* Space between checkbox and task name */
-  cursor: pointer;
-}
-
-/* Edit button */
+/* Action buttons */
 .edit-button,
 .delete-button {
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: 2%;
   font-size: 18px;
+  padding: 5px;
 }
 
-/* Edit icon */
 .edit-button i {
   color: #ffd43b;
 }
 
-/* Delete icon */
 .delete-button i {
   color: red;
 }
 
-/* Hover effect for buttons */
+/* Hover effect for action buttons */
 .edit-button:hover i,
 .delete-button:hover i {
   opacity: 0.8;
