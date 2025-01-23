@@ -1,8 +1,8 @@
 const addTaskButton = document.getElementById("addTaskButton");
-
 const taskInput = document.getElementById("myInput");
 const todoList = document.getElementById("todoList"); // Changed to a list
 const result = document.getElementById("inputVal");
+
 // Filter buttons
 document
   .getElementById("showAll")
@@ -25,8 +25,6 @@ let taskToEditIndex = null; // Store the index of the task being edited
 
 // Initialize the list with tasks from localStorage
 updateList();
-
-
 
 addTaskButton.addEventListener("click", () => {
   const originalText = addTaskButton.textContent; // Store the original text
@@ -51,6 +49,7 @@ addTaskButton.addEventListener("click", () => {
     resetButtonText();
     return;
   }
+
   const isDuplicate = tasks.some(
     (task) => task.name.toLowerCase() === inputValue.toLowerCase()
   );
@@ -165,7 +164,21 @@ function updateList(filter = "all") {
     // Append task item to the list
     todoList.appendChild(taskItem);
   });
+
+  // Update the state of delete buttons
+  updateDeleteButtonsState();
 }
+
+// Function to update the state of delete buttons
+function updateDeleteButtonsState() {
+  const deleteDoneButton = document.getElementById("deletdoneButton");
+  const deleteAllButton = document.getElementById("deletallButton");
+
+  // Enable or disable buttons based on the tasks array
+  deleteAllButton.disabled = tasks.length === 0;
+  deleteDoneButton.disabled = tasks.filter((task) => task.done).length === 0;
+}
+
 // Open the modal for editing
 function openEditModal(index) {
   taskToEditIndex = index;
@@ -211,17 +224,6 @@ window.addEventListener("click", (event) => {
     closeEditModal();
   }
 });
-
-// Filter buttons
-document
-  .getElementById("showAll")
-  .addEventListener("click", () => updateList("all"));
-document
-  .getElementById("showDone")
-  .addEventListener("click", () => updateList("done"));
-document
-  .getElementById("showTodo")
-  .addEventListener("click", () => updateList("todo"));
 
 // Select the "Delete Done Tasks" and "Delete All Tasks" buttons
 const deleteDoneButton = document.getElementById("deletdoneButton");
