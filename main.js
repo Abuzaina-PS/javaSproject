@@ -1,6 +1,6 @@
 const addTaskButton = document.getElementById("addTaskButton");
 const taskInput = document.getElementById("myInput");
-const todoList = document.getElementById("todoList"); // Changed to a list
+const todoList = document.getElementById("todoList");
 const result = document.getElementById("inputVal");
 
 // Filter buttons
@@ -18,35 +18,31 @@ document
 const editTaskModal = document.getElementById("editTaskModal");
 const editTaskInput = document.getElementById("editTaskInput");
 const saveEditButton = document.getElementById("saveEditButton");
-const closeModalButton = document.querySelector(".close-btn");
+const closeEditModalButton = document.querySelector(".close-btn");
 
-let tasks = JSON.parse(localStorage.getItem("tasks")) || []; // Load tasks from localStorage
+// Variables to store task data
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 let taskToEditIndex = null; // Store the index of the task being edited
+let taskToDeleteIndex = null; // Store the index of the task being deleted
 
 // Initialize the list with tasks from localStorage
 updateList();
 
 addTaskButton.addEventListener("click", () => {
-  const originalText = addTaskButton.textContent; // Store the original text
-  addTaskButton.textContent = "Adding..."; // Change the button text
-
   const inputValue = taskInput.value.trim();
 
   if (inputValue === "") {
     showMessage("Task cannot be empty.", "red");
-    resetButtonText();
     return;
   }
 
   if (inputValue.length < 5) {
     showMessage("Task must be at least 5 characters long.", "red");
-    resetButtonText();
     return;
   }
 
   if (/^\d/.test(inputValue)) {
     showMessage("Task cannot start with a number.", "red");
-    resetButtonText();
     return;
   }
 
@@ -55,7 +51,6 @@ addTaskButton.addEventListener("click", () => {
   );
   if (isDuplicate) {
     showMessage("Task already exists.", "red");
-    resetButtonText();
     return;
   }
 
@@ -66,20 +61,14 @@ addTaskButton.addEventListener("click", () => {
   };
 
   tasks.push(newTask);
-
   updateList(); // Update the list
   taskInput.value = ""; // Clear the input field
   saveTasks(); // Save tasks to localStorage
-
-  // Reset the button text after the task is added
-  resetButtonText();
 });
 
 // Function to reset the button text
 function resetButtonText() {
-  setTimeout(() => {
-    addTaskButton.textContent = "Add Task"; // Reset the text to the original
-  }, 990); // Delay for 1 second to simulate a loading effect
+  addTaskButton.textContent = "Add Task"; // Reset the text to the original
 }
 
 // Show validation messages
@@ -107,6 +96,15 @@ function updateList(filter = "all") {
     if (filter === "todo") return !task.done;
     return true; // Show all tasks
   });
+
+  // Check if there are no tasks
+  if (filteredTasks.length === 0) {
+    const noTasksMessage = document.createElement("li");
+    noTasksMessage.textContent = "No tasks.";
+    noTasksMessage.className = "no-tasks-message"; // Optional: add a class for styling
+    todoList.appendChild(noTasksMessage);
+    return; // Exit the function early
+  }
 
   // Iterate over filtered tasks
   filteredTasks.forEach((task, index) => {
@@ -145,11 +143,8 @@ function updateList(filter = "all") {
     deleteButton.className = "delete-button";
     deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
     deleteButton.addEventListener("click", () => {
-      if (confirm("Are you sure you want to delete this task?")) {
-        tasks.splice(index, 1);
-        saveTasks();
-        updateList(filter);
-      }
+      taskToDeleteIndex = index; // Store the index of the task to delete
+      showDeleteModal("single"); // Show delete modal for this task
     });
 
     // Append buttons to actions container
@@ -157,7 +152,7 @@ function updateList(filter = "all") {
     actionsContainer.appendChild(deleteButton);
 
     // Append elements to task item
-    taskItem.appendChild(taskName); // Ensuring text is center
+    taskItem.appendChild(taskName);
     taskItem.appendChild(checkbox);
     taskItem.appendChild(actionsContainer);
 
@@ -168,13 +163,11 @@ function updateList(filter = "all") {
   // Update the state of delete buttons
   updateDeleteButtonsState();
 }
-
 // Function to update the state of delete buttons
 function updateDeleteButtonsState() {
   const deleteDoneButton = document.getElementById("deletdoneButton");
   const deleteAllButton = document.getElementById("deletallButton");
 
-  // Enable or disable buttons based on the tasks array
   deleteAllButton.disabled = tasks.length === 0;
   deleteDoneButton.disabled = tasks.filter((task) => task.done).length === 0;
 }
@@ -186,7 +179,7 @@ function openEditModal(index) {
   editTaskModal.style.display = "block";
 }
 
-// Close the modal
+// Close the edit modal
 function closeEditModal() {
   editTaskModal.style.display = "none";
 }
@@ -216,8 +209,13 @@ saveEditButton.addEventListener("click", () => {
 });
 
 // Close the modal when clicking the "X" button
-closeModalButton.addEventListener("click", closeEditModal);
-
+closeEditModalButton.addEventListener("click", closeEditModal);
+// Delete confirmation modal elements
+const deleteModal = document.getElementById("deleteModal");
+const deleteModalText = document.getElementById("deleteModalText");
+const confirmDeleteButton = document.getElementById("confirmDelete");
+const cancelDeleteButton = document.getElementById("cancelDelete");
+const closeDeleteModalButton = document.querySelector(".close-button");
 // Close the modal when clicking outside of it
 window.addEventListener("click", (event) => {
   if (event.target === editTaskModal) {
@@ -225,20 +223,71 @@ window.addEventListener("click", (event) => {
   }
 });
 
+// Show delete confirmation modal
+function showDeleteModal(action) {
+  deleteModal.style.display = "block"; // Show the modal
+  if (action === "single") {
+    deleteModalText.textContent = "Are you sure you want to delete this task?";
+  } else if (action === "all") {
+    deleteModalText.textContent = "Are you sure you want to delete all tasks?";
+  } else if (action === "done") {
+    deleteModalText.textContent =
+      "Are you sure you want to delete all completed tasks?";
+  }
+}
+
+// Close the delete modal
+function closeDeleteModal() {
+  deleteModal.style.display = "none";
+}
+
+// Confirm delete action
+confirmDeleteButton.addEventListener("click", () => {
+  if (taskToDeleteIndex !== null) {
+    tasks.splice(taskToDeleteIndex, 1); // Remove the specific task
+  }
+  saveTasks(); // Save changes to localStorage
+  updateList(); // Update the list
+  closeDeleteModal(); // Close the modal
+});
+
+// Cancel delete action
+cancelDeleteButton.addEventListener("click", closeDeleteModal);
+
+// Close modal when clicking outside
+window.addEventListener("click", (event) => {
+  if (event.target === deleteModal) {
+    closeDeleteModal();
+  }
+});
 // Select the "Delete Done Tasks" and "Delete All Tasks" buttons
 const deleteDoneButton = document.getElementById("deletdoneButton");
 const deleteAllButton = document.getElementById("deletallButton");
 
+// Variable to store the type of delete action
+let deleteAction = null;
+
 // Add event listener to delete all tasks
 deleteAllButton.addEventListener("click", () => {
-  tasks = [];
-  saveTasks(); // Save changes to localStorage
-  updateList();
+  deleteAction = "all"; // Set the action to delete all
+  showDeleteModal(deleteAction); // Show the confirmation modal
 });
 
 // Add event listener to delete only done tasks
 deleteDoneButton.addEventListener("click", () => {
-  tasks = tasks.filter((task) => !task.done);
+  deleteAction = "done"; // Set the action to delete done tasks
+  showDeleteModal(deleteAction); // Show the confirmation modal
+});
+
+// Confirm delete action
+confirmDeleteButton.addEventListener("click", () => {
+  if (deleteAction === "all") {
+    tasks = []; // Clear all tasks
+  } else if (deleteAction === "done") {
+    tasks = tasks.filter((task) => !task.done); // Clear only done tasks
+  }
+
   saveTasks(); // Save changes to localStorage
-  updateList();
+  updateList(); // Update the list
+  closeDeleteModal(); // Close the modal
 });
