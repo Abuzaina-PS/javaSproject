@@ -421,11 +421,12 @@ input {
 
 .task-checkbox {
   border: none;
-  width: 2%;
-  margin-left: 4%;
-  height: 2%;
-
+  width: 17px; /* Set a consistent width */
+  height: 17px; /* Set a consistent height */
+  margin: 10px;
+  vertical-align: middle; /* Align with text if near a label or text */
   cursor: pointer;
+  display: inline-block; /* Ensure it aligns well with other inline elements */
 }
 
 .task-name {
